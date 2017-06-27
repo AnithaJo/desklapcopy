@@ -1,0 +1,184 @@
+----  Send.cs----
+
+using System;
+using RabbitMQ.Client;
+using System.Text;
+
+class Send
+{
+    private static string[] args;
+
+    public static void Main(string[] args)
+    {
+        var factory = new ConnectionFactory() { HostName = "localhost" };
+        using (var connection = factory.CreateConnection())
+        using (var channel = connection.CreateModel())
+        {
+            channel.QueueDeclare(queue: "task_queue",
+                                 durable: true,
+                                 exclusive: false,
+                                 autoDelete: false,
+                                 arguments: null);
+
+
+            var message = GetMessage(args);
+            var body = Encoding.UTF8.GetBytes(message);
+
+            var properties = channel.CreateBasicProperties();
+            properties.Persistent = true;
+
+           
+                channel.BasicPublish(exchange: "",
+                                     routingKey: "task_queue",
+                                     basicProperties: properties,
+                                     body: body);
+
+                Console.WriteLine(" [x] Sent {0}", message);
+            
+
+        }
+
+        Console.WriteLine(" Press [enter] to exit.");
+        Console.ReadLine();
+    }
+
+    private static string GetMessage(string[] args)
+    {
+        //for (int i = 0; i < 10; i++)
+        //{
+
+        //    Console.WriteLine("Thread {0} consumes {1}", i, i);
+        //}
+
+        //return ((args.Length > 0) ? string.Join(" ", args) : "Hello World!");
+
+
+        byte[] array = System.IO.File.ReadAllBytes("C:\\Users\\admin\\Desktop\\tesst.txt");
+        // int arr = array.Length;
+        var str = System.Text.Encoding.UTF8.GetString(array);
+        //String s = array.ToString();
+                return str;
+        //return ((args.Length > 0) ? string.Join(" ", args) : "Hello World!");
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+---- Receive ------------
+
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using System;
+using System.Text;
+using System.Threading;
+
+class Receive
+{
+    //public static void Main()
+    //{
+
+    //    //var server = "199.63.213.99 ";
+    //    //var password = "guest";
+    //    //var username = "guest";
+    //    //var factory = new ConnectionFactory() { HostName = server , UserName=@"GLOBAL\H225456" , Password="@aniH45_bear"};
+    //    //var factory = new ConnectionFactory() { HostName = "IE3BDT3L3D9F2" , Port = 5672 , UserName = @"GLOBAL\H225456", Password = "@aniH45_bear" };
+
+    //    //var factory = new ConnectionFactory() { HostName = "IE3BDT3L3D9F2" , UserName = "agennt", Password = "agennt"};
+    //    //ConnectionFactory factory = new ConnectionFactory();
+    //    //factory.UserName = @"GLOBAL\H225456";
+    //    //factory.Password = "@aniH45_bear";
+    //    //factory.VirtualHost = "/";
+    //    //factory.Protocol = Protocols.DefaultProtocol;
+    //    //factory.HostName = "IE3BDT3L3D9F2";
+    //    //factory.Port = AmqpTcpEndpoint.UseDefaultPort;
+
+    //factory.UserName = "agennt";
+    //factory.Password = "agennt";
+    ////factory.VirtualHost = "/";
+    //factory.Protocol = Protocols.DefaultProtocol;
+    //factory.HostName = "199.63.213.99";
+    //factory.Port = AmqpTcpEndpoint.UseDefaultPort;
+
+    //    var factory = new ConnectionFactory() { HostName = "localhost" };
+    //    using (IConnection connection = factory.CreateConnection())
+    //    using (var channel = connection.CreateModel())
+    //    {
+    //        channel.QueueDeclare(queue: "hello",
+    //                             durable: false,
+    //                             exclusive: false,
+    //                             autoDelete: false,
+    //                             arguments: null);
+
+    //        var consumer = new EventingBasicConsumer(channel);
+    //        consumer.Received += (model, ea) =>
+    //        {
+    //            var body = ea.Body;
+    //            var message = Encoding.UTF8.GetString(body);
+    //            Console.WriteLine(" [x] Received {0}", message);
+    //            int dots = message.Split('.').Length - 1;
+    //            Thread.Sleep(dots * 1000);
+
+    //            Console.WriteLine(" [x]  Done");
+    //        };
+    //        channel.BasicConsume(queue: "hello",
+    //                             noAck: true,
+    //                             consumer: consumer);
+
+    //        Console.WriteLine(" Press [enter] to exit.");
+    //        Console.ReadLine();
+    //    }
+    //}
+    public static void Main()
+    {
+        //var factory = new ConnectionFactory() { HostName = "localhost" };
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.UserName = "agennt";
+        factory.Password = "agennt";
+        //factory.VirtualHost = "/";
+        factory.Protocol = Protocols.DefaultProtocol;
+        factory.HostName = "199.63.213.99";
+               factory.Port = AmqpTcpEndpoint.UseDefaultPort;
+        using (var connection = factory.CreateConnection())
+        using (var channel = connection.CreateModel())
+        {
+            channel.QueueDeclare(queue: "hello",
+                                 durable: true,
+                                 exclusive: false,
+                                 autoDelete: false,
+                                 arguments: null);
+
+            channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
+
+            Console.WriteLine(" [*] Waiting for messages.");
+
+            var consumer = new EventingBasicConsumer(channel);
+            consumer.Received += (model, ea) =>
+            {
+                var body = ea.Body;
+                var message = Encoding.UTF8.GetString(body);
+                Console.WriteLine(" \n  [x] Received {0}", message);
+                Console.WriteLine(message);
+                //int dots = message.Split('.').Length - 1;
+                //Thread.Sleep(dots * 1000);
+
+                Console.WriteLine(" [x] Done");
+
+                channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+            };
+            channel.BasicConsume(queue: "hello",
+                                 noAck: false,
+                                 consumer: consumer);
+
+            Console.WriteLine(" Press [enter] to exit.");
+            Console.ReadLine();
+        }
+    }
+}

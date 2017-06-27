@@ -1,0 +1,27 @@
+https://www.codeproject.com/Articles/28492/A-C-Wrapper-for-Google-s-Static-Map-API
+
+
+https://github.com/googlemaps/
+
+
+
+http://www.michalsporek.com/blog/index.php/posts/using-google-maps-api-in-dot-net
+
+https://developers.google.com/maps/web-services/overview
+
+
+https://github.com/maximn/google-maps/   ( MOST IMPORTANT  )
+
+
+http://geekswithblogs.net/ensoftBlog/archive/2013/02/26/152237.aspx
+
+
+https://googlemaps.codeplex.com/
+
+https://developers.google.com/maps/documentation/android-api/map-with-marker
+
+
+https://developers.google.com/maps/documentation/javascript/adding-a-google-map
+
+
+https://www.sitepoint.com/working-with-geolocation-and-google-maps-api/

@@ -1,0 +1,9 @@
+http://artifactory.honeywell.com/artifactory/api/nuget/Morley_Hydra 	- Source
+
+Hydra_Packages 	-	Name
+
+
+ var server = "http://199.63.213.99";
+        var password = "guest";
+        var username = "guest";
+                var factory = new ConnectionFactory() { HostName = server , UserName= username, Password =password};

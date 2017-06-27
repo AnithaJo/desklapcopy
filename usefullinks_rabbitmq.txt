@@ -1,0 +1,7 @@
+USEFUL LINKS
+
+
+https://www.rabbitmq.com/ttl.html
+
+
+https://www.compose.com/articles/configuring-rabbitmq-exchanges-queues-and-bindings-part-2/

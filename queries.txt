@@ -1,0 +1,103 @@
+Data Source=ADMIN-PC\SQLEXPRESS;Initial Catalog=movieticketapp;Integrated Security=True
+
+
+insert into Theatre values 
+('PVR','orion','WONDER WOMAN',null,null,98,0,0); 
+insert into Theatre values 
+('PVR','ORION','DHOOM 420',null,null,98,0,0); 
+insert into Theatre values 
+('PVR','ORION','NEED FOR SPEED UNWANTED',null,null,98,0,0); 
+insert into Theatre values 
+('PVR','ORION','HORRIBLE BOSSES',null,null,98,0,0); 
+insert into Theatre values 
+('PVR','ORION','KRISSH:THE RETURN OF JADDU',null,null,98,0,0); 
+insert into Theatre values 
+('PVR','ORION','SATURDAY NIGHT AT HONEYWELL',null,null,98,0,0); 
+
+
+
+string _connString =
+       ConfigurationManager.ConnectionStrings["DefaultConnection1"].ConnectionString;
+            SqlConnection con = new SqlConnection(_connString);
+            SqlCommand com = new SqlCommand("select moviename from Theatre where theatrename = '" + TextBox1.Text + "'", con);
+            SqlDataReader dr = com.ExecuteReader();
+             try
+            {
+                con.Open();
+                        
+                DropDownList1.Items.Clear();
+                while (dr.Read())
+                {
+                    DropDownList1.Items.Add(new ListItem(dr[0].ToString(), dr[0].ToString()));
+                }
+
+            }
+            finally
+            {
+                // 3. close the reader
+                if (dr != null)
+                {
+                    dr.Close();
+                }
+
+                // close the connection
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+declare @i INT
+set @i=1;
+while @i<=98
+begin
+	insert into seatallotment values(@i,'AVAILABLE',NULL,'PVR','ORION','WONDER WOMAN','03:00:00',NULL);
+	set @i=@i+1;
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ while (dr.Read())
+                {
+                    value2 = dr.GetString(0);
+                    LinkButton2.Text = value2;
+                                     Label5.Text = value2;
+
+                }
+                dr.NextResult();
+                while (dr.Read())
+                {
+                    value3 = dr.GetString(0);
+                    LinkButton3.Text = value3;
+                    Label6.Text = value3;
+                }
+                dr.NextResult();
+
+                while (dr.Read())
+                {
+                    value4 = dr.GetString(0);
+                    LinkButton4.Text = value4;
+                    Label7.Text = value4;
+
+                }
